@@ -1,0 +1,71 @@
+.pokemonArea {
+  text-align: center;
+  padding-top: 20px;
+}
+.pokemonDisplayArea {
+  height: 335px;
+  width: 400px;
+  margin: 20px auto;
+  background-color: #7e7e7e;
+  border: 2px solid black;
+  padding-top: 15px;
+}
+.pokemonArea button {
+  background-color: black;
+  color: white;
+  margin-left: 3px;
+  box-shadow: 3px 3px 2px 1px darkgrey;
+  margin-top: 5px;
+  border-radius: 7px;
+  border: 1px solid white;
+  padding: 5px;
+}
+.pokemonArea button:hover {
+  background-color: gray;
+}
+
+.pleaseSelect {
+  padding-top: 20%;
+}
+.loadingCircle {
+  margin-top: 40px;
+}
+.innerPokemonArea {
+  background-color: cornsilk;
+  width: 250px;
+  height: 300px;
+  margin-right: auto;
+  margin-left: auto;
+  border: black solid 3px;
+  text-align: center;
+}
+
+.innerPokemonArea a {
+  margin-top: 5px;
+  display: block;
+}
+
+.pokemonArea input {
+  border: 2px solid darkgray;
+  height: 30px;
+}
+
+@media only screen and (max-width: 650px) {
+  .pokemonDisplayArea {
+    height: 400px;
+    width: 75%;
+    background-color: rgb(126, 126, 126);
+    border: 2px solid black;
+    padding-top: 15px;
+    margin: auto;
+    margin-top: 10px;
+  }
+  .innerPokemonArea {
+    background-color: cornsilk;
+    width: 75%;
+    height: 350px;
+    margin-right: auto;
+    margin-left: auto;
+    border: black solid 3px;
+  }
+}
