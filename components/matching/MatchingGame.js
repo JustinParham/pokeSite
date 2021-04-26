@@ -11,7 +11,6 @@ export default function MatchingGame() {
   const [score, setScore] = useState(0);
   const [turn, setTurn] = useState(0);
   const [pokeDataArray, setPokeDataArray] = useState([]);
-  const [dataObj, setDataObj] = useState(null);
   const [innerPokeDataArray, setInnerPokeDataArray] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [correct, setCorrect] = useState(false);
@@ -57,62 +56,53 @@ export default function MatchingGame() {
         set.add(Math.floor(1 + Math.random() * 898));
       } while (set.size < 3);
 
-      return set;
+      return Array.from(set);
     }
     function getSetArray() {
-      let array = [];
+      let newArray = [];
       do {
-        array.push(getRanNums());
-      } while (array.length < 10);
-      return array;
+        newArray.push(getRanNums());
+      } while (newArray.length < 10);
+
+      return newArray;
     }
 
     function getPokeDataObject(num) {
-      fetch(`https://pokeapi.co/api/v2/pokemon/${num}`)
+      return fetch(`https://pokeapi.co/api/v2/pokemon/${num}`)
         .then(res => res.json())
-        .then(data => {
-          data.pokemonNumber = num;
-
-          setInnerPokeDataArray(prevValue => {
-            return [...prevValue, data];
-          });
-        });
+        .then(data => data)
+        .catch(err => console.log(err));
     }
 
     // This forEach loop inside a forEach loop, or the useEffect
     // hook that relies upoun it seem to be the problem
     // need to come up with a solution
-    if (gameInProgress) {
-      setIsLoading(true);
-      let x = getSetArray();
+    function retrievePokeData() {
+      if (gameInProgress) {
+        setIsLoading(true);
+        let randomPokeSetArray = getSetArray();
+        console.log(randomPokeSetArray);
 
-      x.forEach(item => {
-        return item.forEach(thing => {
-          return getPokeDataObject(thing);
+        let preparedPokeData = randomPokeSetArray.map(item => {
+          return item.map(thing => {
+            return getPokeDataObject(thing);
+          });
         });
-      });
+
+        setPokeDataArray(preparedPokeData);
+      }
     }
+    retrievePokeData();
   }, [gameInProgress]);
 
   useEffect(() => {
-    if (innerPokeDataArray.length === 3) {
-      setPokeDataArray(prevValue => {
-        return [...prevValue, innerPokeDataArray];
-      });
-    }
-  }, [innerPokeDataArray]);
+    console.log(pokeDataArray);
 
-  useEffect(() => {
-    console.log("array check");
-
-    if (pokeDataArray.length > 0 && pokeDataArray[0].length === 3) {
+    if (pokeDataArray.length > 0) {
       setIsLoading(false);
-      let lastItem = pokeDataArray[pokeDataArray.length - 1];
-      if (lastItem.length > 2) {
-        setInnerPokeDataArray([]);
-      }
     }
-  }, [pokeDataArray]);
+  }),
+    [pokeDataArray];
 
   // check the value of the selection against ran 1-3 num that was
   // generated and change the state to correct or incorrect
@@ -159,6 +149,7 @@ export default function MatchingGame() {
             <span>Press start to begin</span>
           )}
         </div>
+        <div>{JSON.stringify(pokeDataArray)}</div>
       </div>
     </Fragment>
   );
