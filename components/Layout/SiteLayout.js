@@ -18,7 +18,7 @@ export default function SiteLayout(props) {
           <div className={classes.headerImage}>
             <a href="http://jparham.herokuapp.com">
               <Image
-                src="/jlogo.png"
+                src="/Jlogo.png"
                 height={75}
                 width={75}
                 alt="JParham-Logo-Image"
