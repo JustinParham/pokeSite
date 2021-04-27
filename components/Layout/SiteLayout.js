@@ -16,7 +16,7 @@ export default function SiteLayout(props) {
       <div className={classes.wrapper}>
         <div className={classes.header}>
           <div className={classes.headerImage}>
-            <a href="http://jparham.herokuapp.com">
+            <a href="https://jparham.herokuapp.com">
               <Image
                 src="/Jlogo.png"
                 height={75}
