@@ -2,7 +2,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: 1.3rem;
-  border-bottom: 3px solid black;
+  border-bottom: 2px solid black;
   display: flex;
   flex-direction: row;
 }
@@ -10,15 +10,10 @@
 .navBar a {
   text-decoration: none;
   color: inherit;
-  border-right: 2px solid black;
+
   padding: 5px 15px;
   text-align: center;
-  background-color: lightgray;
   margin-right: 5px;
-  border-left: 2px solid black;
-}
-.leftLink {
-  border-left: 0px solid black;
 }
 
 .navBar a:hover {
@@ -26,9 +21,6 @@
   color: white;
 }
 
-.signInArea {
-  border-left: 2px solid black;
-}
 .linkArea {
   flex-grow: 1;
 }
@@ -44,6 +36,7 @@
     text-align: center;
     padding: 0;
     display: inherit;
+    border-top: 2px solid black;
   }
   .signInArea {
     height: 40px;

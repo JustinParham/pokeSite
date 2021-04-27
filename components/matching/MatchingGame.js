@@ -11,26 +11,28 @@ export default function MatchingGame() {
   const [score, setScore] = useState(0);
   const [turn, setTurn] = useState(0);
   const [pokeDataArray, setPokeDataArray] = useState([]);
-  const [innerPokeDataArray, setInnerPokeDataArray] = useState([]);
+  const [gameCompleted, setGameCompleted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [correct, setCorrect] = useState(false);
-  const [answer, setAnswer] = useState(null);
+  const [correctAnswer, setCorrectAnswer] = useState(false);
+  const [userAnswer, setUserAnswer] = useState(null);
 
   useEffect(() => {
     function oneOfThree() {
       return Math.floor(Math.random() * 3);
     }
     if (turn > 0) {
-      setAnswer(oneOfThree());
+      setCorrectAnswer(oneOfThree());
+    }
+    if (turn > 10) {
+      setGameInProgress(false);
+      setGameCompleted(true);
     }
   }, [turn]);
 
   function handleStart() {
     setGameInProgress(true);
     setTurn(1);
-    if (gameInProgress) {
-      setScore(0);
-    }
+    setScore(0);
   }
 
   // get 3 random numbers
@@ -81,40 +83,48 @@ export default function MatchingGame() {
       if (gameInProgress) {
         setIsLoading(true);
         let randomPokeSetArray = getSetArray();
-        console.log(randomPokeSetArray);
 
-        let preparedPokeData = randomPokeSetArray.map(item => {
-          return item.map(thing => {
-            return getPokeDataObject(thing);
-          });
-        });
+        const preparedPokeData = () => {
+          return Promise.all(
+            randomPokeSetArray.map(item => {
+              return Promise.all(item.map(thing => getPokeDataObject(thing)));
+            })
+          );
+        };
 
-        setPokeDataArray(preparedPokeData);
+        preparedPokeData().then(data => setPokeDataArray(data));
       }
     }
     retrievePokeData();
   }, [gameInProgress]);
 
   useEffect(() => {
-    console.log(pokeDataArray);
-
     if (pokeDataArray.length > 0) {
       setIsLoading(false);
     }
-  }),
-    [pokeDataArray];
+  }, [pokeDataArray]);
 
-  // check the value of the selection against ran 1-3 num that was
-  // generated and change the state to correct or incorrect
+  // sets the UserAnswer state
   // so that when handleSubmit runs it can evalute that state value
   // and decide to update the score or not
-  function handleSelection(e) {}
+  function handleSelection(e) {
+    const userInput = parseInt(e.target.attributes.option.value);
+    console.log(userInput);
+    setUserAnswer(userInput);
+  }
 
   // check the value of the selection and update the score
   // accordingly, and then move to the next turn
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log(e.target.children);
+  function handleSubmit(event) {
+    event.preventDefault();
+    if (userAnswer === correctAnswer) {
+      console.log("Correct");
+      setScore(prevValue => prevValue + 1);
+    } else if (userAnswer !== correctAnswer) {
+      console.log("Incorrect");
+    }
+    document.getElementById("userInputForm").reset();
+    setUserAnswer(null);
     setTurn(prevValue => prevValue + 1);
   }
 
@@ -122,34 +132,46 @@ export default function MatchingGame() {
     <Fragment>
       <div className={classes.gameInfoArea}>
         <h1>Name that pokemon!</h1>
-        <button onClick={handleStart}>
-          {gameInProgress ? "Restart" : "Start"}
-        </button>
+        {gameInProgress ? null : (
+          <button className={classes.startButton} onClick={handleStart}>
+            Start
+          </button>
+        )}
       </div>
       <div className={classes.mainGameArea}>
         <div className={classes.scorekeepingArea}>
-          <p>Score: {score}</p>
-          <p>{pokeDataArray.length}</p>
-          {turn ? <p>turn {turn}/10</p> : null}
+          {turn && gameInProgress ? (
+            <Fragment>
+              <span>Score: {score}</span>
+              <br></br>
+              <span>Turn {turn}/10</span>
+            </Fragment>
+          ) : null}
         </div>
-        <div className={classes.gameCardArea}>
-          {gameInProgress && isLoading ? (
+
+        {gameInProgress && isLoading ? (
+          <div className={classes.loadingDiv}>
             <Loading />
-          ) : gameInProgress &&
-            pokeDataArray.length > 0 &&
-            pokeDataArray[turn - 1].length > 2 ? (
-            <InnerGame
-              onFormSubmit={handleSubmit}
-              onSelect={handleSelection}
-              pokearray={pokeDataArray[turn - 1]}
-              currentTurn={turn}
-              numSelection={answer}
-            />
-          ) : (
-            <span>Press start to begin</span>
-          )}
-        </div>
-        <div>{JSON.stringify(pokeDataArray)}</div>
+            <h4>Loading...</h4>
+          </div>
+        ) : gameInProgress && pokeDataArray.length > 0 && turn < 11 ? (
+          <InnerGame
+            onFormSubmit={handleSubmit}
+            onSelect={handleSelection}
+            pokearray={pokeDataArray[turn - 1]}
+            currentTurn={turn}
+            numSelection={correctAnswer}
+            value={userAnswer}
+            gameStatus={gameInProgress}
+          />
+        ) : !gameInProgress && gameCompleted ? (
+          <div className={classes.gameOverScreen}>
+            <p className={classes.gameOver}>Game Over!</p>
+            <p>You scored: {score}</p>
+          </div>
+        ) : (
+          <div className={classes.pressStartText}>Press start to begin</div>
+        )}
       </div>
     </Fragment>
   );

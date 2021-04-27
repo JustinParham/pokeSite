@@ -1,17 +1,15 @@
 .innerGameArea {
-  background: slategrey;
+  background: inherit;
   text-align: center;
   width: 90%;
   margin-right: auto;
   margin-left: auto;
-  box-shadow: 5px 5px 5px darkgray;
-  border: 3px solid white;
   padding-bottom: 10px;
   margin-top: 10px;
 }
 
 .innerGameArea input {
-  margin-right: 30px;
+  margin-right: 10px;
 }
 
 .innerGameArea button {
@@ -19,8 +17,42 @@
 }
 
 .imageArea {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+}
+
+.submitButton {
+  height: 50px;
+  width: 125px;
+  border-radius: 25px;
+  border: 2px solid black;
+  box-shadow: 4px 3px 1px #424242;
+  font-size: 1.1rem;
+}
+
+.submitButton:hover {
+  background-color: black;
+  color: white;
+  border: 2px solid white;
+}
+
+.radioForm div {
+  text-align: left;
+}
+
+.radioForm {
+  width: 30%;
+}
+.radioOption {
+  align-self: left;
+}
+.formArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (max-width: 600px) {
+  .radioForm {
+    width: 70%;
+  }
 }

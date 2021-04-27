@@ -7,10 +7,11 @@ import Link from "next/link";
 import NavBar from "./NavBar";
 
 export default function SiteLayout(props) {
+  const footerYear = () => new Date().getFullYear();
   return (
     <Fragment>
       <Head>
-        <title>Random Pokemon Generator</title>
+        <title>PokeApi Site</title>
       </Head>
       <div className={classes.wrapper}>
         <div className={classes.header}>
@@ -24,12 +25,13 @@ export default function SiteLayout(props) {
               />
             </a>
           </div>
-          <div className={classes.headerText}>Pokemon Finder</div>
+          <div className={classes.headerText}>PokeAPI Site</div>
         </div>
         <NavBar />
         <div className={classes.contentArea}>{props.children}</div>
         <div className={classes.footer}>
-          <div>Hi im the footer</div>
+          <a href="mailto: justinjparham@gmail.com">Contact</a>
+          <div>&#169; {footerYear()}</div>
         </div>
       </div>
     </Fragment>
