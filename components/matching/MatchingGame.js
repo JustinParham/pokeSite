@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import classes from "./MatchingGame.module.css";
 
 import Loading from "../Loading/Loading";
-import InnerGame from "./innerGame";
+import InnerGame from "./InnerGame";
 import { green } from "@material-ui/core/colors";
 import fetch from "node-fetch";
 
